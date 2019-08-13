@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <button id="counter">Click me (0)</button>
+
+
+
+  <script>
+    document.getElementById("counter").onclick = function() {click()};
+    
+
+    function click() {
+      let elem = 'counter';
+      let counter = getCounter(elem);
+      render(increment(counter), elem);
+    }
+
+    function getCounter(elem) {
+      let currValStr = document.getElementById(elem).innerHTML;
+      return currValStr.match(/\d+/)[0];
+    }
+
+    function render(val, elem) {
+      document.getElementById("counter").innerHTML = `Click me (${val})`;
+    }
+
+    function increment(val) {
+      return val == 3 ? 0 : ++val;
+    }
+
+    </script>
+</body>
+</html>
