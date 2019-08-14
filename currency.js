@@ -11,24 +11,24 @@ http.createServer(async (req, res) => {
     res.end();
     console.log('favicon requested');
     return;
-}
+  }
+
   let dates = getDates(6);
   let formatedDates = dates.map(fomatDate);
-  let currencies = [];
+  let currencies = await getCurrencies(formatedDates);
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.write(JSON.stringify(currencies));
+    res.end();
+}).listen(8080);
 
+function getCurrencies(formatedDates) {
+  let currencies = [];
   for(const date of formatedDates) {
     console.log(url + date);
     currencies.push(getData(url + date));
   }
-  console.log(currencies);
-  Promise.all(currencies).then(currencies => {
-    res.writeHead(200, {'Content-Type': 'application/json'});
-    res.write(JSON.stringify(currencies));
-    res.end();
-  })
-}).listen(8080);
-
-
+  return Promise.all(currencies);
+}
 
 
 async function getData(url) {
