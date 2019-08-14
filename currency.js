@@ -12,18 +12,20 @@ http.createServer(async (req, res) => {
     console.log('favicon requested');
     return;
 }
-  let currencies = []; 
   let dates = getDates(6);
   let formatedDates = dates.map(fomatDate);
+  let currencies = [];
 
   for(const date of formatedDates) {
     console.log(url + date);
-    currencies.push(await getData(url + date));
+    currencies.push(getData(url + date));
   }
-
-  res.writeHead(200, {'Content-Type': 'application/json'});
-  res.write(JSON.stringify(currencies));
-  res.end();
+  console.log(currencies);
+  Promise.all(currencies).then(currencies => {
+    res.writeHead(200, {'Content-Type': 'application/json'});
+    res.write(JSON.stringify(currencies));
+    res.end();
+  })
 }).listen(8080);
 
 
@@ -40,7 +42,7 @@ async function getData(url) {
 
       resp.on('end', () => {
         console.log('currencies recieved');
-        res(JSON.parse(data));
+        res(data);
       });
 
     }).on("error", (err) => {
